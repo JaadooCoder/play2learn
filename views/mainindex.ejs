@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIQBattle - Game Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link rel="stylesheet" href="main-style.css" />
+  <style>
+    /* Extra styles just to reflect changes without touching your main stylesheet */
+    .file-upload-area {
+      background: none;
+      border: none;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    #text-input {
+      width: 80%;
+      padding: 1rem;
+      font-size: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">
+      <img src="./assets/logo.jpg" alt="GameLearn Logo" height="40">
+      <h1>Play 2learn</h1>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search games or topics...">
+    </div>
+    <div class="user-profile">
+      <i class="fas fa-bell"></i>
+      <img src="./assets/user.jpg" alt="User Profile">
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Category -->
+
+      <!-- Upload Section -->
+      <div class="upload-container">
+        <h2 class="upload-header">Enter the subject for the games</h2>
+        <form action="/xyz" method="POST">
+          <div class="file-upload-area" id="file-upload-area">
+            <i class="fas fa-pencil-alt fa-3x mb-3" style="color: #3498db;"></i>
+            <p class="mb-0"></p>
+            <input type="text" id="text-input" name="topicText" placeholder="Type your topic here..." required>
+          </div>
+            
+          <h2 class="text-center mb-3">Select your difficulty</h2>
+          <br>
+          <div class="difficulty-buttons">
+            <button type="button" class="difficulty-btn easy" value="easy">Easy</button>
+            <button type="button" class="difficulty-btn medium" value="medium">Medium</button>
+            <button type="button" class="difficulty-btn hard" value="hard">Hard</button>
+          </div>
+            
+          <!-- Hidden input to store difficulty level -->
+          <input type="hidden" id="difficulty" name="difficulty" required>
+            
+          <div class="action-buttons">
+            <button type="submit" class="btn-primary">Select Games</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  <footer>
+    <div class="copyright">
+      <p>&copy; 2025 AIQBattle. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+    const difficultyInput = document.getElementById('difficulty');
+
+    difficultyButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        difficultyInput.value = button.value;
+        difficultyButtons.forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+      });
+    });
+  </script>
+
+</body>
+</html>

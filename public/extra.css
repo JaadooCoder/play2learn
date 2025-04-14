@@ -1,0 +1,48 @@
+/* style.css */
+.logo{
+    margin-top: 5px;
+}
+
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fixed button at bottom-left */
+#get-started-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+#get-started-btn:hover {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    transform: scale(1.05);
+}
+.cta-button {
+    background: #000000;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+  }

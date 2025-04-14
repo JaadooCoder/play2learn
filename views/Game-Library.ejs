@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSphere - Game Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+            padding: 2rem;
+        }
+
+        .game-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .game-card p {
+            color: #2c3e50;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .premium-card {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-5" style="color: #2c3e50; font-weight: 700;">Game Library</h1>
+        
+        <div class="game-section">
+            <h2 class="section-title">Free Games</h2>
+            <div class="game-grid">
+                <a href="/snake" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="game-card">
+                        <img src="/assets/snake.png" alt="Snake Game">
+                        <p>Snake Game</p>
+                    </div>
+                </a>
+                <a href="/tick" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="game-card">
+                        <img src="/assets/tic-logo.jpg" alt="Snake Game">
+                        <p>Tic-Tac-Toe</p>
+                    </div>
+                </a>
+                <a href="/hangman" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="game-card">
+                        <img src="/assets/hangman.png" alt="Game 3">
+                        <p>Hangman</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="game-section">
+            <h2 class="section-title">Premium Games</h2>
+            <div class="game-grid">
+                <div class="game-card premium-card">
+                    <span class="premium-badge">Premium</span>
+                    <img src="/assets/hill-climb.jpeg" alt="Game 5">
+                    <p>Hill Climb Racing</p>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+body {
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background-color: #222;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: lime;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+#gameCanvas {
+  background-color: #000;
+  border: 2px solid lime;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  margin: 20px auto;
+  display: block;
+}
+
+.game-controls {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#topicSelect {
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid lime;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#message {
+  height: 30px;
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.correct-message {
+  color: lime;
+  animation: pulse 1s;
+}
+
+.wrong-message {
+  color: red;
+  animation: shake 0.5s;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: none;
+  z-index: 10;
+}
+
+#questionModal, #gameOverModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid lime;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+  z-index: 20;
+  display: none;
+  width: 80%;
+  max-width: 500px;
+}
+
+#questionText {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+#options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option {
+  background-color: #555;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.option:hover {
+  background-color: #777;
+  transform: translateY(-2px);
+}
+
+#gameOverModal h2 {
+  color: red;
+  margin-bottom: 20px;
+}
+
+#finalScore {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#restartBtn {
+  background-color: lime;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#restartBtn:hover {
+  background-color: #00cc00;
+  transform: scale(1.05);
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>/* General Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #dfe9f3, #ffffff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: #222;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .status {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 8px;
+            background-color: #444;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cell {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        .cell:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .cell.x {
+            color: #e74c3c;
+        }
+        
+        .cell.o {
+            color: #27ae60;
+        }
+        
+        .restart-btn {
+            background-color: #2980b9;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .restart-btn:hover {
+            background-color: #1f6396;
+        }
+        
+        /* Modal Styling */
+        .question-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        
+        .question-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from {transform: translateY(30px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+        
+        .question-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            background-color: #f9f9f9;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #e6e6e6;
+        }
+        
+        .option.selected {
+            background-color: #2ecc71;
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .submit-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe vs AI with Questions</h1>
+    
+    <div class="game-container">
+        <div class="status">Your turn (X)</div>
+        <div class="board" id="board">
+            <!-- Cells -->
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <button class="restart-btn" id="restartBtn">🔄 Restart Game</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="question-modal" id="questionModal">
+        <div class="question-content">
+            <img class="question-image" id="questionImage" src="images.png" alt="Question Image">
+            <div class="question-text" id="questionText"></div>
+            <div class="options-container" id="optionsContainer"></div>
+            <button class="submit-btn" id="submitAnswer" disabled>Submit</button>
+        </div>
+    </div>
+
+    <script >document.addEventListener('DOMContentLoaded', () => {
+        const board = document.getElementById('board');
+        const cells = document.querySelectorAll('.cell');
+        const status = document.querySelector('.status');
+        const restartBtn = document.getElementById('restartBtn');
+        const questionModal = document.getElementById('questionModal');
+        const questionText = document.getElementById('questionText');
+        const questionImage = document.getElementById('questionImage');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const submitAnswer = document.getElementById('submitAnswer');
+    
+        let currentPlayer = 'X'; // User is X, AI is O
+        let gameActive = true;
+        let gameState = ['', '', '', '', '', '', '', '', ''];
+        let currentCellIndex = null;
+        let selectedOption = null;
+        let currentQuestions = []; // To store the Thermodynamics questions
+    
+        // Winning conditions
+        const winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+            [0, 4, 8], [2, 4, 6]             // diagonals
+        ];
+    
+        // Initialize the game
+        function initGame() {
+            currentPlayer = 'X';
+            gameActive = true;
+            gameState = ['', '', '', '', '', '', '', '', ''];
+            status.textContent = 'Your turn (X)';
+            
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('x', 'o');
+                cell.addEventListener('click', handleCellClick);
+            });
+            
+            // Fetch Thermodynamics quiz data (you can mock this or fetch from a server)
+            fetchThermodynamicsQuizData(); // Always fetch Thermodynamics quiz
+        }
+    
+        // Handle cell click
+        function handleCellClick(e) {
+            if (!gameActive || currentPlayer !== 'X') return;
+    
+            const clickedCell = e.target;
+            const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+    
+            // If cell is already filled, return
+            if (gameState[clickedCellIndex] !== '') return;
+    
+            // Save the clicked cell index and show question
+            currentCellIndex = clickedCellIndex;
+            showRandomQuestion();
+        }
+    
+        // Fetch Thermodynamics quiz data
+        function fetchThermodynamicsQuizData() {
+            // Mock Thermodynamics quiz data (replace with actual data fetching logic if needed)
+            currentQuestions = [
+                {
+                    text: 'What is the first law of thermodynamics?',
+                    options: ['Energy cannot be created or destroyed', 'Entropy is always decreasing', 'The universe is a closed system', 'Heat is the only form of energy'],
+                    correct: 0
+                },
+                {
+                    text: 'What does the second law of thermodynamics state?',
+                    options: ['Entropy of the universe is constant', 'Entropy of the universe tends to increase', 'Energy is always conserved', 'All reactions are reversible'],
+                    correct: 1
+                },
+                {
+                    text: 'Which of the following is not a state function?',
+                    options: ['Temperature', 'Pressure', 'Heat', 'Volume'],
+                    correct: 2
+                },
+                {
+                    text: 'What is the unit of heat in the SI system?',
+                    options: ['Joule', 'Calorie', 'Kilowatt-hour', 'Btu'],
+                    correct: 0
+                },
+                {
+                    text: 'What does the third law of thermodynamics state?',
+                    options: ['Entropy approaches a minimum as temperature approaches absolute zero', 'Energy is always conserved', 'Heat flows from cold to hot bodies', 'The efficiency of any machine is less than 100%'],
+                    correct: 0
+                },
+                {
+                    text: 'Which process occurs without heat exchange?',
+                    options: ['Adiabatic process', 'Isothermal process', 'Isochoric process', 'Isobaric process'],
+                    correct: 0
+                },
+                {
+                    text: 'Which of these is a type of thermodynamic system?',
+                    options: ['Open', 'Closed', 'Isolated', 'All of the above'],
+                    correct: 3
+                },
+                {
+                    text: 'What is the relationship between work and heat in thermodynamics?',
+                    options: ['They are not related', 'They are directly proportional', 'They are inversely proportional', 'They are both forms of energy exchange'],
+                    correct: 3
+                },
+                {
+                    text: 'Which of the following statements about entropy is true?',
+                    options: ['Entropy can never decrease in a closed system', 'Entropy can be zero at absolute zero', 'Entropy is a measure of disorder', 'All of the above'],
+                    correct: 3
+                },
+                {
+                    text: 'What is the Carnot cycle?',
+                    options: ['The cycle used by an ideal heat engine', 'A real thermodynamic process', 'A refrigeration cycle', 'None of the above'],
+                    correct: 0
+                }
+            ];
+            // After fetching the data, show a question
+            showRandomQuestion();
+        }
+    
+        // Show a random question based on the fetched data
+        function showRandomQuestion() {
+            if (!gameActive || currentQuestions.length === 0) return;
+    
+            const randomQuestion = currentQuestions[Math.floor(Math.random() * currentQuestions.length)];
+            questionImage.src = 'https://via.placeholder.com/500x300?text=Thermodynamics+Question'; // Placeholder image for questions
+            questionText.textContent = randomQuestion.text;
+    
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            selectedOption = null;
+            submitAnswer.disabled = true;
+    
+            // Add new options
+            randomQuestion.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+    
+                optionElement.addEventListener('click', () => {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+    
+                    // Add selected class to clicked option
+                    optionElement.classList.add('selected');
+                    selectedOption = index;
+                    submitAnswer.disabled = false;
+                });
+    
+                optionsContainer.appendChild(optionElement);
+            });
+    
+            questionModal.style.display = 'flex';
+        }
+    
+        // Handle answer submission
+        submitAnswer.addEventListener('click', () => {
+            const currentQuestion = currentQuestions.find(q => q.text === questionText.textContent);
+    
+            if (selectedOption === currentQuestion.correct) {
+                // Correct answer - proceed with the move
+                questionModal.style.display = 'none';
+                makeMove(currentCellIndex, 'X');
+    
+                // AI makes a move after a short delay
+                if (gameActive) {
+                    setTimeout(() => {
+                        aiMove();
+                    }, 800);
+                }
+            } else {
+                // Wrong answer - miss the turn
+                questionModal.style.display = 'none';
+                status.textContent = 'Wrong answer! AI gets a turn.';
+    
+                // AI makes a move after a short delay
+                setTimeout(() => {
+                    aiMove();
+                }, 1500);
+            }
+        });
+    
+        // Make the move after correct answer
+        function makeMove(cellIndex, player) {
+            gameState[cellIndex] = player;
+            cells[cellIndex].textContent = player;
+            cells[cellIndex].classList.add(player.toLowerCase());
+    
+            checkResult();
+        }
+    
+        // AI makes a move
+        function aiMove() {
+            if (!gameActive || currentPlayer !== 'O') return;
+    
+            // Simple AI - first tries to win, then blocks, then random
+            let move = findWinningMove('O') || findWinningMove('X') || findRandomMove();
+    
+            if (move !== null) {
+                makeMove(move, 'O');
+            }
+        }
+    
+        // Find a winning move for the specified player
+        function findWinningMove(player) {
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+    
+                // Check if two in a row with one empty
+                if (gameState[a] === player && gameState[b] === player && gameState[c] === '') return c;
+                if (gameState[a] === player && gameState[c] === player && gameState[b] === '') return b;
+                if (gameState[b] === player && gameState[c] === player && gameState[a] === '') return a;
+            }
+            return null;
+        }
+    
+        // Find a random available move
+        function findRandomMove() {
+            const availableMoves = [];
+            for (let i = 0; i < gameState.length; i++) {
+                if (gameState[i] === '') {
+                    availableMoves.push(i);
+                }
+            }
+            return availableMoves.length > 0 ? 
+                availableMoves[Math.floor(Math.random() * availableMoves.length)] : null;
+        }
+    
+        // Check for win or draw
+        function checkResult() {
+            let roundWon = false;
+    
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+    
+                if (gameState[a] === '' || gameState[b] === '' || gameState[c] === '') {
+                    continue;
+                }
+    
+                if (gameState[a] === gameState[b] && gameState[b] === gameState[c]) {
+                    roundWon = true;
+                    break;
+                }
+            }
+    
+            if (roundWon) {
+                const winner = currentPlayer === 'X' ? 'You' : 'AI';
+                status.textContent = `${winner} wins!`;
+                gameActive = false;
+                return;
+            }
+    
+            // Check for draw
+            if (!gameState.includes('')) {
+                status.textContent = 'Game ended in a draw!';
+                gameActive = false;
+                return;
+            }
+    
+            // Change player
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            status.textContent = currentPlayer === 'X' ? 'Your turn (X)' : 'AI is thinking...';
+        }
+    
+        // Restart game
+        restartBtn.addEventListener('click', initGame);
+    
+        // Initialize the game
+        initGame();
+    });
+    </script>
+</body>
+</html>
