@@ -1,96 +1,530 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AIQBattle - Game Platform</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-  <link rel="stylesheet" href="main-style.css" />
-  <style>
-    /* Extra styles just to reflect changes without touching your main stylesheet */
-    .file-upload-area {
-      background: none;
-      border: none;
-      text-align: center;
-      padding: 1rem 0;
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play 2learn - Game Platform</title>
+    <link rel="stylesheet" href="main-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <style>
+        /* Matching styling from index.ejs - light theme */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Gilroy', sans-serif;
+        }
 
-    #text-input {
-      width: 80%;
-      padding: 1rem;
-      font-size: 1rem;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      margin-top: 1rem;
-    }
-  </style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            background-color: #f5f5f7;
+            color: #111;
+            overflow-x: hidden;
+        }
+
+        #nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 99;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        #nav h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: #111;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 40px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 2px solid #ddd;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #111;
+            outline: none;
+            width: 500px;
+            font-size: 14px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .user-profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .user-profile img:hover {
+            transform: scale(1.05);
+        }
+
+        .user-profile i {
+            font-size: 1.2rem;
+            color: #111;
+        }
+
+        /* User dropdown menu styling */
+        .user-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            width: 200px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .user-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .user-dropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-dropdown li {
+            padding: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .user-dropdown li:last-child {
+            border-bottom: none;
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .user-dropdown a:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            color: #000;
+        }
+
+        .user-dropdown i {
+            margin-right: 10px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-dropdown .sign-out {
+            color: #e74c3c;
+        }
+
+        #main {
+            padding-top: 120px;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .upload-container {
+            width: 80%;
+            max-width: 800px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        .upload-header {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #111;
+            line-height: 1.2;
+        }
+
+        .upload-header b {
+            font-weight: 900;
+            color: #000;
+        }
+
+        .upload-header i {
+            font-style: italic;
+        }
+
+        .upload-header span {
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-upload-area {
+            padding: 30px;
+            border-radius: 10px;
+            background-color: rgba(240, 240, 245, 0.8);
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px dashed #ccc;
+        }
+
+        #text-input {
+            width: 90%;
+            padding: 15px;
+            font-size: 1.2rem;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            color: #111;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #text-input:focus {
+            border-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 30px 0;
+            color: #111;
+        }
+
+        .difficulty-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .difficulty-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f0f0f5;
+            color: #111;
+            border: 1px solid #ddd;
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .difficulty-btn.selected {
+            background-color: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        .difficulty-btn.easy:hover, .difficulty-btn.easy.selected {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        .difficulty-btn.medium:hover, .difficulty-btn.medium.selected {
+            background-color: #FF9800;
+            border-color: #FF9800;
+            color: #fff;
+        }
+
+        .difficulty-btn.hard:hover, .difficulty-btn.hard.selected {
+            background-color: #F44336;
+            border-color: #F44336;
+            color: #fff;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        #get-started-btn, .btn-primary {
+            padding: 15px 40px;
+            background-color: #111;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        #get-started-btn:hover, .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #get-started-btn:active, .btn-primary:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Quote styling */
+        .quote {
+            font-style: italic;
+            margin: 15px 0;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background-color: #111;
+            padding: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Fix for page scroll issue */
+        html {
+            scroll-behavior: smooth;
+            overflow-y: auto;
+        }
+
+        /* Overlay for dropdown */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: transparent;
+            z-index: 90;
+            display: none;
+        }
+
+        /* Animation for dropdown */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-dropdown.active {
+            animation: fadeInDown 0.25s ease forwards;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- Overlay for closing dropdown when clicking outside -->
+    <div class="overlay" id="overlay"></div>
 
-  <!-- Navigation -->
-  <nav>
-    <div class="logo">
-      <img src="./assets/logo.jpg" alt="GameLearn Logo" height="40">
-      <h1>Play 2learn</h1>
-    </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Search games or topics...">
-    </div>
-    <div class="user-profile">
-      <i class="fas fa-bell"></i>
-      <img src="./assets/user.jpg" alt="User Profile">
-    </div>
-  </nav>
-
-  <div class="container">
-    <!-- Category -->
-
-      <!-- Upload Section -->
-      <div class="upload-container">
-        <h2 class="upload-header">Enter the subject for the games</h2>
-        <form action="/xyz" method="POST">
-          <div class="file-upload-area" id="file-upload-area">
-            <i class="fas fa-pencil-alt fa-3x mb-3" style="color: #3498db;"></i>
-            <p class="mb-0"></p>
-            <input type="text" id="text-input" name="topicText" placeholder="Type your topic here..." required>
-          </div>
+    <div id="nav">
+        <div class="logo">
+            <img src="./assets/logo.jpg" alt="Play 2learn Logo">
+            <h1>Play 2 learn</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search games or topics...">
+        </div>
+        <div class="user-profile">
+            <i class="fas fa-bell"></i>
+            <img src="./assets/user.jpg" alt="User Profile" id="user-img">
             
-          <h2 class="text-center mb-3">Select your difficulty</h2>
-          <br>
-          <div class="difficulty-buttons">
-            <button type="button" class="difficulty-btn easy" value="easy">Easy</button>
-            <button type="button" class="difficulty-btn medium" value="medium">Medium</button>
-            <button type="button" class="difficulty-btn hard" value="hard">Hard</button>
-          </div>
-            
-          <!-- Hidden input to store difficulty level -->
-          <input type="hidden" id="difficulty" name="difficulty" required>
-            
-          <div class="action-buttons">
-            <button type="submit" class="btn-primary">Select Games</button>
-          </div>
-        </form>
-      </div>
+            <!-- User dropdown menu -->
+            <div class="user-dropdown" id="user-dropdown">
+                <ul>
+                    <li>
+                        <a href="leaderboard">
+                            <i class="fas fa-trophy"></i>
+                            Leaderboards
+                        </a>
+                    </li>
+                    <li>
+                        <a href="xp">
+                            <i class="fas fa-star"></i>
+                            Subscriptions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="out" class="sign-out">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Sign Out
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-  <footer>
-    <div class="copyright">
-      <p>&copy; 2025 AIQBattle. All rights reserved.</p>
+    <div id="main">
+        <div class="container">
+            <div class="upload-container">
+                <h2 class="upload-header"><b>MAKE</b> Your <b><i>Learning</i></b> <span>Fun!</span></h2>
+                <form action="/xyz" method="POST">
+                    <div class="file-upload-area" id="file-upload-area">
+                        <i class="fas fa-pencil-alt fa-3x" style="color: #333; margin-bottom: 15px;"></i>
+                        <p class="quote">"Education isn't preparation for life—it is life."</p>
+                        <input type="text" id="text-input" name="topicText" placeholder="Type your topic here..." required>
+                    </div>
+                        
+                    <h2><b>SELECT</b> Your <span>Difficulty</span></h2>
+                    <div class="difficulty-buttons">
+                        <button type="button" class="difficulty-btn easy" value="easy">Easy</button>
+                        <button type="button" class="difficulty-btn medium" value="medium">Medium</button>
+                        <button type="button" class="difficulty-btn hard" value="hard">Hard</button>
+                    </div>
+                        
+                    <!-- Hidden input to store difficulty level -->
+                    <input type="hidden" id="difficulty" name="difficulty" required>
+                        
+                    <div class="action-buttons">
+                        <button type="submit" id="get-started-btn">LET'S PLAY</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </footer>
 
-  <script>
-    const difficultyButtons = document.querySelectorAll('.difficulty-btn');
-    const difficultyInput = document.getElementById('difficulty');
+    <footer>
+        <div class="copyright">
+            <p>DREAM. LEARN. DO. &copy; 2025 Play 2learn. All rights reserved.</p>
+        </div>
+    </footer>
 
-    difficultyButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        difficultyInput.value = button.value;
-        difficultyButtons.forEach(btn => btn.classList.remove('selected'));
-        button.classList.add('selected');
-      });
-    });
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Difficulty button selection
+            const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+            const difficultyInput = document.getElementById('difficulty');
 
+            difficultyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    difficultyInput.value = this.value;
+                    difficultyButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // Set default difficulty
+            if (!difficultyInput.value) {
+                const easyButton = document.querySelector('.difficulty-btn.easy');
+                if (easyButton) {
+                    easyButton.click();
+                }
+            }
+
+            // User dropdown functionality
+            const userImg = document.getElementById('user-img');
+            const userDropdown = document.getElementById('user-dropdown');
+            const overlay = document.getElementById('overlay');
+
+            userImg.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('active');
+                
+                if (userDropdown.classList.contains('active')) {
+                    overlay.style.display = 'block';
+                } else {
+                    overlay.style.display = 'none';
+                }
+            });
+
+            // Close dropdown when clicking outside
+            overlay.addEventListener('click', function() {
+                userDropdown.classList.remove('active');
+                overlay.style.display = 'none';
+            });
+
+            // Close dropdown when clicking escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    userDropdown.classList.remove('active');
+                    overlay.style.display = 'none';
+                }
+            });
+
+            // Make sure text input is visible
+            const textInput = document.getElementById('text-input');
+            if (textInput) {
+                textInput.style.display = 'block';
+            }
+        });
+
+        // Prevent page from getting stuck on reload
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        };
+    </script>
 </body>
 </html>

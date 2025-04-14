@@ -6,173 +6,210 @@
   <title>Snake Quiz Game</title>
   <style>
     body {
-  font-family: 'Arial', sans-serif;
-  text-align: center;
-  background-color: #222;
-  color: #fff;
-  margin: 0;
-  padding: 20px;
-}
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      background-color: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
 
-h1 {
-  color: lime;
-  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-}
+    h1 {
+      font-size: 3rem;
+      color: #333;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
 
-#gameCanvas {
-  background-color: #000;
-  border: 2px solid lime;
-  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-  margin: 20px auto;
-  display: block;
-}
+    h1 b {
+      color: #2a7fff;
+    }
 
-.game-controls {
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
+    h1 span {
+      color: #ff5757;
+      font-style: italic;
+    }
 
-#topicSelect {
-  padding: 8px;
-  border-radius: 4px;
-  background-color: #333;
-  color: #fff;
-  border: 1px solid lime;
-  font-size: 16px;
-  cursor: pointer;
-}
+    #gameCanvas {
+      background-color: #ffffff;
+      border: 2px solid #2a7fff;
+      box-shadow: 0 0 30px rgba(42, 127, 255, 0.3);
+      margin: 20px auto;
+      display: block;
+      border-radius: 10px;
+    }
 
-#message {
-  height: 30px;
-  margin: 10px 0;
-  font-size: 18px;
-  font-weight: bold;
-}
+    #message {
+      height: 30px;
+      margin: 20px 0;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
 
-.correct-message {
-  color: lime;
-  animation: pulse 1s;
-}
+    .correct-message {
+      color: #28a745;
+      animation: pulse 1s;
+    }
 
-.wrong-message {
-  color: red;
-  animation: shake 0.5s;
-}
+    .wrong-message {
+      color: #ff5757;
+      animation: shake 0.5s;
+    }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-10px); }
-  40%, 80% { transform: translateX(10px); }
-}
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
 
-#overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: none;
-  z-index: 10;
-}
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: none;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+    }
 
-#questionModal, #gameOverModal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #333;
-  padding: 20px;
-  border-radius: 10px;
-  border: 2px solid lime;
-  box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
-  z-index: 20;
-  display: none;
-  width: 80%;
-  max-width: 500px;
-}
+    #questionModal, #gameOverModal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      border: 2px solid #2a7fff;
+      box-shadow: 0 10px 40px rgba(42, 127, 255, 0.2);
+      z-index: 20;
+      display: none;
+      width: 80%;
+      max-width: 500px;
+    }
 
-#questionText {
-  color: #fff;
-  margin-bottom: 20px;
-}
+    #questionText {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 22px;
+      line-height: 1.5;
+    }
 
-#options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    #options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-.option {
-  background-color: #555;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
+    .option {
+      background-color: #f1f7ff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 18px;
+      border: 1px solid rgba(42, 127, 255, 0.2);
+      color: #333;
+    }
 
-.option:hover {
-  background-color: #777;
-  transform: translateY(-2px);
-}
+    .option:hover {
+      background-color: #e1edff;
+      transform: translateY(-3px);
+      border-color: #2a7fff;
+      box-shadow: 0 5px 15px rgba(42, 127, 255, 0.2);
+    }
 
-#gameOverModal h2 {
-  color: red;
-  margin-bottom: 20px;
-}
+    #gameOverModal h2 {
+      color: #ff5757;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
 
-#finalScore {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
+    #finalScore {
+      font-size: 28px;
+      margin-bottom: 30px;
+      font-weight: bold;
+      color: #333;
+    }
 
-#restartBtn {
-  background-color: lime;
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  font-size: 18px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
+    #restartBtn {
+      background-color: #2a7fff;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-#restartBtn:hover {
-  background-color: #00cc00;
-  transform: scale(1.05);
-}
+    #restartBtn:hover {
+      background-color: #1a6ee0;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(42, 127, 255, 0.3);
+    }
 
-.loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255,255,255,.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  margin: 0 auto;
-}
+    .loading {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(42, 127, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #2a7fff;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto;
+    }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .game-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      margin-bottom: 20px;
+      font-size: 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .score-display, .topic-display {
+      background-color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      border: 1px solid rgba(42, 127, 255, 0.3);
+      box-shadow: 0 5px 15px rgba(42, 127, 255, 0.1);
+    }
+
+    .score-display span, .topic-display span {
+      color: #2a7fff;
+      font-weight: bold;
+    }
   </style>
-  
 </head>
 <body>
+  <h1><b>SNAKE</b> Quiz <span>Game!</span></h1>
   
-  <h1>🐍 Snake Quiz Game</h1>
-  
- 
+  <div class="game-info">
+    <div class="score-display">Score: <span id="scoreDisplay">0</span></div>
+    <div class="topic-display">Topic: <span id="topicDisplay"><%=title%></span></div>
+  </div>
   
   <canvas id="gameCanvas" width="400" height="400"></canvas>
   <div id="message"></div>
@@ -189,11 +226,14 @@ h1 {
     <button id="restartBtn">Play Again</button>
   </div>
   
-  <script >const canvas = document.getElementById('gameCanvas');
+  <script>
+    const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const gridSize = 20;
     const rows = canvas.height / gridSize;
     const cols = canvas.width / gridSize;
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const topicDisplay = document.getElementById('topicDisplay');
     
     let snake = [
       { x: 10, y: 10 },
@@ -209,6 +249,9 @@ h1 {
     
     // This will come from server (hardcoded for now)
     let currentTopic = "<%=title%>"; // or "Newton's Laws of Motion"
+    
+    // Update topic display
+    topicDisplay.innerText = currentTopic;
     
     // Question bank
     const quizDatabase = {
@@ -266,15 +309,87 @@ h1 {
     }
     
     function drawSnake() {
-      ctx.fillStyle = 'lime';
-      snake.forEach(segment => {
-        ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+      // Create gradient for snake
+      snake.forEach((segment, index) => {
+        // Head is brighter
+        if (index === 0) {
+          ctx.fillStyle = '#2a7fff';
+        } else {
+          // Gradient from bright to darker for body
+          const gradient = ctx.createLinearGradient(
+            segment.x * gridSize, 
+            segment.y * gridSize, 
+            segment.x * gridSize + gridSize, 
+            segment.y * gridSize + gridSize
+          );
+          gradient.addColorStop(0, '#2a7fff');
+          gradient.addColorStop(1, '#1a6ee0');
+          ctx.fillStyle = gradient;
+        }
+        
+        // Draw rounded rectangle for segments
+        roundRect(
+          ctx,
+          segment.x * gridSize, 
+          segment.y * gridSize, 
+          gridSize - 1, 
+          gridSize - 1, 
+          4
+        );
       });
     }
     
+    // Function to draw rounded rectangles
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      ctx.fill();
+    }
+    
     function drawFood() {
-      ctx.fillStyle = 'red';
-      ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+      // Create glowing effect for food
+      const gradient = ctx.createRadialGradient(
+        food.x * gridSize + gridSize / 2, 
+        food.y * gridSize + gridSize / 2, 
+        gridSize / 8,
+        food.x * gridSize + gridSize / 2, 
+        food.y * gridSize + gridSize / 2, 
+        gridSize / 2
+      );
+      gradient.addColorStop(0, '#ff5757');
+      gradient.addColorStop(1, '#ff3333');
+      
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(
+        food.x * gridSize + gridSize / 2, 
+        food.y * gridSize + gridSize / 2, 
+        gridSize / 2 - 1, 
+        0, 
+        Math.PI * 2
+      );
+      ctx.fill();
+      
+      // Add highlight
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.beginPath();
+      ctx.arc(
+        food.x * gridSize + gridSize / 3, 
+        food.y * gridSize + gridSize / 3, 
+        gridSize / 6, 
+        0, 
+        Math.PI * 2
+      );
+      ctx.fill();
     }
     
     function getRandomQuestion() {
@@ -310,14 +425,30 @@ h1 {
     function gameLoop() {
       if (!gamePaused && !gameOver) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw grid lines for better visibility
+        ctx.strokeStyle = 'rgba(42, 127, 255, 0.1)';
+        ctx.lineWidth = 0.5;
+        
+        for (let i = 0; i <= rows; i++) {
+          ctx.beginPath();
+          ctx.moveTo(0, i * gridSize);
+          ctx.lineTo(canvas.width, i * gridSize);
+          ctx.stroke();
+        }
+        
+        for (let i = 0; i <= cols; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * gridSize, 0);
+          ctx.lineTo(i * gridSize, canvas.height);
+          ctx.stroke();
+        }
+        
         moveSnake();
-        drawSnake();
         drawFood();
-    
-        ctx.fillStyle = 'white';
-        ctx.font = '20px Arial';
-        ctx.fillText(`Score: ${score}`, 10, 30);
-        ctx.fillText(`Topic: ${currentTopic}`, 10, 60);
+        drawSnake();
+        
+        scoreDisplay.innerText = score;
       }
     }
     
@@ -343,39 +474,43 @@ h1 {
       modal.style.display = 'block';
       optionsDiv.innerHTML = '<div class="loading"></div>';
     
-      const question = getRandomQuestion();
-    
-      document.getElementById('questionText').innerText = question.question;
-      optionsDiv.innerHTML = '';
-    
-      question.options.forEach((opt, i) => {
-        const btn = document.createElement('div');
-        btn.classList.add('option');
-        btn.innerText = opt;
-        btn.onclick = () => {
-          modal.style.display = 'none';
-          overlay.style.display = 'none';
-    
-          if (i === question.answer) {
-            document.getElementById('message').innerText = 'Correct!';
-            document.getElementById('message').className = 'correct-message';
-            const tail = snake[snake.length - 1];
-            snake.push({ x: tail.x, y: tail.y });
-            score++;
-          } else {
-            document.getElementById('message').innerText = 'Wrong Answer!';
-            document.getElementById('message').className = 'wrong-message';
-          }
-    
-          setTimeout(() => {
-            document.getElementById('message').innerText = '';
-            document.getElementById('message').className = '';
-          }, 1500);
-    
-          resumeGame();
-        };
-        optionsDiv.appendChild(btn);
-      });
+      // Simulate loading for better UX
+      setTimeout(() => {
+        const question = getRandomQuestion();
+      
+        document.getElementById('questionText').innerText = question.question;
+        optionsDiv.innerHTML = '';
+      
+        question.options.forEach((opt, i) => {
+          const btn = document.createElement('div');
+          btn.classList.add('option');
+          btn.innerText = opt;
+          btn.onclick = () => {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+      
+            if (i === question.answer) {
+              document.getElementById('message').innerText = 'Correct!';
+              document.getElementById('message').className = 'correct-message';
+              const tail = snake[snake.length - 1];
+              snake.push({ x: tail.x, y: tail.y });
+              score++;
+              scoreDisplay.innerText = score;
+            } else {
+              document.getElementById('message').innerText = 'Wrong Answer!';
+              document.getElementById('message').className = 'wrong-message';
+            }
+      
+            setTimeout(() => {
+              document.getElementById('message').innerText = '';
+              document.getElementById('message').className = '';
+            }, 1500);
+      
+            resumeGame();
+          };
+          optionsDiv.appendChild(btn);
+        });
+      }, 500);
     }
     
     function showGameOverPopup() {
@@ -393,6 +528,7 @@ h1 {
       direction = { x: 1, y: 0 };
       food = randomFood();
       score = 0;
+      scoreDisplay.innerText = score;
       gameOver = false;
       gamePaused = false;
       document.getElementById('message').innerText = '';
@@ -423,7 +559,6 @@ h1 {
     });
     
     startGameLoop();
-    
-    </script>
+  </script>
 </body>
 </html>
